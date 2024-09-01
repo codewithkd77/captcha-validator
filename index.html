@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Captcha Validator</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100vh;
+      background-color: #f0f0f0;
+      margin: 0;
+    }
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .captcha-text {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      user-select: none;
+      position: relative;
+    }
+    .captcha-text::before,
+    .captcha-text::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #ddd;
+      width: 100%;
+      height: 2px;
+    }
+    .captcha-text::before {
+      left: 0;
+    }
+    .captcha-text::after {
+      right: 0;
+    }
+    .captcha-text span {
+      display: inline-block;
+      padding: 0 5px;
+      transform: skewX(-15deg);
+      color: #333;
+    }
+    .captcha-text span:nth-child(odd) {
+      transform: skewX(15deg);
+    }
+    input[type="text"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #error-message {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    #error-message.success {
+      color: green;
+    }
+    #error-message.error {
+      color: red;
+    }
+    footer {
+      background-color: #f0f0f0;
+      padding: 10px 0;
+      text-align: center;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }
+    @media screen and (max-width: 500px) {
+      .container {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Captcha Validator</h1>
+    <div class="captcha-text" id="captcha-text"></div>
+    <input type="text" id="captcha-input" placeholder="Enter the Captcha">
+    <button id="validate-button">Validate</button>
+    <button id="refresh-button">Refresh Captcha</button>
+    <div id="error-message"></div>
+  </div>
+
+  <footer>
+    <p>Made by <a href="https://github.com/codewithkd77" target="_blank">@codewithkd77</a></p>
+  </footer>
+
+  <script>
+    const captchaTextElement = document.getElementById('captcha-text');
+    const captchaInputElement = document.getElementById('captcha-input');
+    const validateButton = document.getElementById('validate-button');
+    const refreshButton = document.getElementById('refresh-button');
+    const errorMessage = document.getElementById('error-message');
+
+    function generateCaptchaText() {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let captchaText = '';
+      for (let i = 0; i < 6; i++) {
+        captchaText += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return captchaText;
+    }
+
+    function validateCaptcha() {
+      const userCaptcha = captchaInputElement.value.trim();
+      const correctCaptcha = captchaTextElement.textContent.trim();
+      if (userCaptcha === correctCaptcha) {
+        errorMessage.textContent = 'Captcha validated successfully!';
+        errorMessage.classList.add('success');
+        errorMessage.classList.remove('error');
+      } else {
+        errorMessage.textContent = 'Invalid captcha. Please try again.';
+        errorMessage.classList.add('error');
+        errorMessage.classList.remove('success');
+      }
+    }
+
+    function refreshCaptcha() {
+      captchaTextElement.innerHTML = '';
+      let captchaText = generateCaptchaText();
+      for (let i = 0; i < captchaText.length; i++) {
+        captchaTextElement.innerHTML += `<span>${captchaText[i]}</span>`;
+      }
+      captchaInputElement.value = '';
+      errorMessage.textContent = '';
+      errorMessage.classList.remove('success');
+      errorMessage.classList.remove('error');
+    }
+
+    captchaInputElement.addEventListener('keyup', function(event) {
+      if (event.key === 'Enter') {
+        validateCaptcha();
+      }
+    });
+
+    validateButton.addEventListener('click', validateCaptcha);
+    refreshButton.addEventListener('click', refreshCaptcha);
+
+    // Generate initial captcha
+    refreshCaptcha();
+  </script>
+</body>
+</html>
