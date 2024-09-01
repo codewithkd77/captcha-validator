@@ -14,4 +14,4 @@ project, I'd appreciate your [🌟 on GitHub](https://github.com/codewithkd77/ca
 
 ## You can also buy me a cup of coffee   
 <a href="https://buymeacoffee.com/codewithkd77"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width=200px></a>
-https://github.com/codewithkd77/captcha-validator.git
+
